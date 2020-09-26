@@ -21,7 +21,7 @@ def get_good_genome(my_str):
     
     left = {}
     left["A"] = my_dict["A"] - num_ACGT
-    left["C"] = my_dict["C"] - num_ACGT - num_CC
+    left["C"] = my_dict["C"] - num_ACGT - num_CC * 2
     left["G"] = my_dict["G"] - num_ACGT
     left["T"] = my_dict["T"] - num_ACGT
 
