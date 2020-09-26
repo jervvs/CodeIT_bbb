@@ -29,12 +29,12 @@ def line_intersection(line1, line2): # line1 = ([x1,y1], [x2,y2]), line2 = ([x3,
         return None
 
 @app.route('/revisitgeometry', methods=['POST'])
-def evaluateGeometry():
+def evaluate(shapeCoordinates, lineCoordinates):
     data = request.get_json();
     logging.info("data sent for evaluation {}".format(data))
 
-    shapeCoordinates = data.get("shapeCoordinates")
-    lineCoordinates = data.get("lineCoordinates")
+    shapeCoordinates = data.get("input").get("shapeCoordinates")
+    lineCoordinates = data.get("input").get("lineCoordinates")
 
     n = len(shapeCoordinates)
     l = len(lineCoordinates)
