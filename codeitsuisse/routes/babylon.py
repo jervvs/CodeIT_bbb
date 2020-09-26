@@ -8,7 +8,7 @@ from codeitsuisse import app;
 logger = logging.getLogger(__name__)
 
 @app.route('/olympiad-of-babylon', methods=['POST'])
-def evaluate():
+def evaluateOptimalBooks():
     data = request.get_json();
     logging.info("data sent for evaluation {}".format(data))
 
