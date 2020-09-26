@@ -51,10 +51,10 @@ def get_gmo():
     data = request.get_json();
     logging.info("data sent for evaluation {}".format(data))
     entries = data.get("list");
-    given_id = data.get("runId");
+    given_id = data.get("id");
     
     result = {
-        "runId": given_id,
+        "id": given_id,
         "list": [
             {
                 "id": entry["id"],
