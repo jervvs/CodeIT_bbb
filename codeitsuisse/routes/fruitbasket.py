@@ -1,23 +1,6 @@
-# @app.route('/fruitbasket', methods=['POST'])
-# def evaluateFruit():
-    # data = request.get_data()
-    # data = json.loads(data)
-    # logging.info("data sent for evaluation {}".format(data))
-
-    # appleAmount = data["maApple"]
-    # watermelonAmount = data["maWatermelon"]
-    # bananaAmount = data["maBanana"]
-
-    # appleWeight = 70
-    # watermelonWeight = 55
-    # bananaWeight = 50
-
-    # result = appleAmount*appleWeight + watermelonAmount*watermelonWeight + bananaAmount*bananaWeight
-
-    # return result
-
 import logging
 import json
+import numpy as np
 import math
 
 from flask import request, jsonify;
@@ -29,14 +12,17 @@ logger = logging.getLogger(__name__)
 @app.route('/fruitbasket', methods=['POST'])
 def evaluate_fruitbasket():
     data = request.get_data()
-    data = json.loads(data)
     logging.info("data sent for evaluation {}".format(data))
 
-    # estimate = 0
-    # for item in data.keys():
-    #     estimate += (50 * data[item])
+    appleAmount = data.get("maApple")
+    watermelonAmount = data.get("maWatermelon")
+    bananaAmount = data.get("maBanana")
 
-    # estimate = int(math.ceil(estimate/100.0))*100
-    # logging.info("My result :{}".format(estimate))
-    # result = "{}".format()
-    return 0
+    appleWeight = 75
+    watermelonWeight = 50
+    bananaWeight = 50
+
+    result = appleAmount * appleWeight + watermelonAmount * watermelonWeight + bananaAmount * bananaWeight
+
+    logging.info("My result :{}".format(result))
+    return json.dumps(result)
