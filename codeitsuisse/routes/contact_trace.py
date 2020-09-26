@@ -65,14 +65,14 @@ def contact_trace():
     data = request.get_json()
     logging.info("data sent for evaluation {}".format(data))
 
-    tracemap = {}
-    cluster = []
-    visited = defaultdict(int)
-
     infected_name = data['infected']['name']
     infected_genome = data['infected']['genome']
     origin_name = data['origin']['name']
     origin_genome = data['origin']['genome']
+
+    tracemap = {}
+    cluster = []
+    visited = defaultdict(int)
 
     tracemap[infected_name] = infected_genome
     tracemap[origin_name] = origin_genome
