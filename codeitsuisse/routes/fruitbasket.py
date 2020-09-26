@@ -1,12 +1,3 @@
-# import logging
-# import json
-
-# from flask import request, jsonify;
-
-# from codeitsuisse import app;
-
-# logger = logging.getLogger(__name__)
-
 # @app.route('/fruitbasket', methods=['POST'])
 # def evaluateFruit():
     # data = request.get_data()
@@ -27,6 +18,7 @@
 
 import logging
 import json
+import math
 
 from flask import request, jsonify;
 
@@ -40,10 +32,11 @@ def evaluate_fruitbasket():
     data = json.loads(data)
     logging.info("data sent for evaluation {}".format(data))
 
-    result = 0
+    estimate = 0
     for item in data.keys():
-        result += 50 * data[item]
+        estimate += (50 * data[item])
 
-    logging.info("My result :{}".format(result))
-    result = "{}".format(result)
+    estimate = int(math.ceil(estimate/100.0))*100
+    logging.info("My result :{}".format(estimate))
+    result = "{}".format()
     return result

@@ -64,4 +64,4 @@ def get_gmo():
     }
 
     logging.info("My result :{}".format(result))
-    return json.dumps(result);
+    return jsonify(result);
