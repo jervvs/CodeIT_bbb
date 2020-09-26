@@ -29,6 +29,6 @@ def evaluateSalad():
 
     result = {'result': res}
     logging.info("My result :{}".format(result))
-    return json.dumps(res);
+    return json.dumps(result);
 
 
