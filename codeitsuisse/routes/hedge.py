@@ -38,23 +38,31 @@ def optimized_portfolio(portfolio, indexFutures):
                                         portfolio_value, index["IndexFuturePrice"], 
                                         index["Notional"])
 
-        if hedge_ratio < most_optimal["OptimalHedgeRatio"] and index["FuturePrcVol"] < most_optimal["FuturesVolatility"]:
+        if hedge_ratio < most_optimal["OptimalHedgeRatio"]:
             most_optimal = {"HedgePositionName": index["Name"], 
                             "OptimalHedgeRatio": hedge_ratio,
                             "NumFuturesContract": num_future_contract,
                             "FuturesVolatility": index["FuturePrcVol"]}
 
-        elif (hedge_ratio < most_optimal["OptimalHedgeRatio"] and index["FuturePrcVol"] > most_optimal["FuturesVolatility"] or 
-            hedge_ratio > most_optimal["OptimalHedgeRatio"] and index["FuturePrcVol"] < most_optimal["FuturesVolatility"]):
-            if num_future_contract < most_optimal["NumFuturesContract"]:
-                most_optimal = {"HedgePositionName": index["Name"], 
-                            "OptimalHedgeRatio": hedge_ratio,
-                            "NumFuturesContract": num_future_contract,
-                            "FuturesVolatility": index["FuturePrcVol"]}
-            else:
-                continue
-        else:
+        elif hedge_ratio > most_optimal["OptimalHedgeRatio"]:
             continue
+
+        else:
+            if index["FuturePrcVol"] < most_optimal["FuturesVolatility"]:
+                most_optimal = {"HedgePositionName": index["Name"], 
+                                "OptimalHedgeRatio": hedge_ratio,
+                                "NumFuturesContract": num_future_contract,
+                                "FuturesVolatility": index["FuturePrcVol"]}
+
+            elif index["FuturePrcVol"] > most_optimal["FuturesVolatility"]:
+                continue
+
+            else:
+                if num_future_contract < most_optimal["NumFuturesContract"]:
+                    most_optimal = {"HedgePositionName": index["Name"], 
+                        "OptimalHedgeRatio": hedge_ratio,
+                        "NumFuturesContract": num_future_contract,
+                        "FuturesVolatility": index["FuturePrcVol"]}
 
     most_optimal.pop('FuturesVolatility', None)
     return most_optimal
