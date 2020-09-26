@@ -87,5 +87,5 @@ def inventory_management():
             "searchResult": manage_inventory(entry["searchResult"])
         })
 
-    logging.info("My result :{}".format(result))
-    return jsonify(result);
+    logging.info("My result :{}".format(results))
+    return jsonify(results);
