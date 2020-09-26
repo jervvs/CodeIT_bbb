@@ -25,17 +25,33 @@ def clusters(arr):
             while len(new_infected) != 0:
                 new_person = new_infected.pop(0)
                 for direction in directions:
-                    x = new_person[0] + direction[0]
-                    y = new_person[1] + direction[1]
+                    r_ = new_person[0] + direction[0]
+                    c_ = new_person[1] + direction[1]
 
-                    if x>=0 and x<cols and y>=0 and y<rows:
-                        if str([x,y]) not in visited and arr[x][y] != '*':
-                            new_infected.append([x,y])
-                            visited[str([x,y])] = 1
+                    if r_>=0 and r_<rows and c_>=0 and c_<cols:
+                        if str([r_,c_]) not in visited and arr[r_][c_] != '*':
+                            new_infected.append([r_,c_])
+                            visited[str([r_,c_])] = 1
     return res
 
+# print(clusters(  [
+#     ["*", "*", "*", "*", "*", "*", "*", "*", "*"],
+#     ["*", "0", "0", "0", "*", "*", "*", "*", "*"],
+#     ["*", "*", "1", "*", "*", "*", "*", "*", "*"],
+#     ["*", "0", "0", "0", "*", "*", "*", "*", "*"],
+#     ["*", "*", "*", "*", "0", "*", "*", "*", "*"],
+#     ["*", "*", "*", "*", "*", "0", "0", "*", "*"],
+#     ["*", "*", "*", "*", "1", "*", "*", "*", "0"],
+#     ["*", "*", "*", "*", "0", "*", "*", "0", "0"],
+#     ["*", "*", "*", "*", "*", "*", "*", "*", "*"],
+#     ["*", "*", "*", "*", "*", "*", "*", "*", "*"],
+#     ["*", "*", "*", "*", "*", "*", "*", "*", "*"],
+#     ["*", "*", "1", "0", "0", "*", "*", "*", "*"],
+#     ["*", "*", "*", "*", "*", "*", "*", "*", "*"]
+#   ]))
+
 @app.route('/cluster', methods=['POST'])
-def evaluateCluster():
+def evaluate():
     data = request.get_json();
     logging.info("data sent for evaluation {}".format(data))
     arr = data
