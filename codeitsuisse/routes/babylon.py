@@ -20,8 +20,9 @@ def evaluateOptimalBooks():
     max_books = min(numberOfDays * 3, numberOfBooks)
 
     result = get_books(sorted(books)[0: max_books], days, 0, 0)
+    res = {'optimalNumberOfBooks': result}
     logging.info("My result :{}".format(result))
-    return json.dumps(result);
+    return json.dumps(res);
 
 
 def get_books(books, days, book_index, books_read):
