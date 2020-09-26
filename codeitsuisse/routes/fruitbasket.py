@@ -9,12 +9,13 @@ logger = logging.getLogger(__name__)
 
 @app.route('/fruitbasket', methods=['POST'])
 def evaluateFruit():
-    data = request.get_json();
+    data = request.get_data()
+    data = json.loads(data)
     logging.info("data sent for evaluation {}".format(data))
 
-    appleAmount = data.get("maApple")
-    watermelonAmount = data.get("maWatermelon")
-    bananaAmount = data.get("maBanana")
+    appleAmount = data["maApple"]
+    watermelonAmount = data["maWatermelon"]
+    bananaAmount = data["maBanana"]
 
     appleWeight = 70
     watermelonWeight = 55
@@ -23,6 +24,3 @@ def evaluateFruit():
     result = appleAmount*appleWeight + watermelonAmount*watermelonWeight + bananaAmount*bananaWeight
 
     return result
-
-    # logging.info("My result :{}".format(result))
-    # return json.dumps(result);
