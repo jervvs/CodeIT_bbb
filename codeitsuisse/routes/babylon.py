@@ -17,7 +17,7 @@ def evaluateBabylon():
     books = data.get("books");
     days = data.get("days");
 
-    dp = np.full([numberOfBooks] + [i + 1 for i in days], -1)
+    # dp = np.full([numberOfBooks] + [i + 1 for i in days], -1)
     # result = maxWeight(days, books, numberOfBooks)
 
     max_book = min(numberOfDays*3, numberOfBooks)
