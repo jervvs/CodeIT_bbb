@@ -32,11 +32,11 @@ def evaluate_fruitbasket():
     data = json.loads(data)
     logging.info("data sent for evaluation {}".format(data))
 
-    estimate = 0
-    for item in data.keys():
-        estimate += (50 * data[item])
+    # estimate = 0
+    # for item in data.keys():
+    #     estimate += (50 * data[item])
 
-    estimate = int(math.ceil(estimate/100.0))*100
-    logging.info("My result :{}".format(estimate))
-    result = "{}".format()
-    return result
+    # estimate = int(math.ceil(estimate/100.0))*100
+    # logging.info("My result :{}".format(estimate))
+    # result = "{}".format()
+    return 0
