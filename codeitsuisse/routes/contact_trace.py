@@ -93,10 +93,9 @@ def contact_trace():
         elif i[0] == infected_name and count == 0:
             count += 1
         else:
-            sep = " -> "
             if i[1]:
                 path_str+="*"
-            path_str += sep
+            path_str += ' -> '
             path_str += i[0]
     path.append(path_str)
     logging.info("My result :{}".format(path))
