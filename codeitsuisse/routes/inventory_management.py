@@ -59,7 +59,10 @@ def find_similarity(search_item_name, item):
     new_str = get_changes(search_item_name, item, dp)
     return (num_changes, new_str[1:])
 
-def manage_inventory(items):
+def manage_inventory(my_dict):
+    search_item_name = my_dict["searchItemName"]
+    items = my_dict["items"]
+
     my_list = []
     for item in items:
         num_changes, new_str = find_similarity(search_item_name, item)
@@ -80,7 +83,7 @@ def inventory_management():
     for entry in data:
         results.append({
             "searchItemName": entry["searchItemName"],
-            "searchResult": manage_inventory(entry["items"])
+            "searchResult": manage_inventory(entry)
         })
 
     logging.info("My result :{}".format(results))
