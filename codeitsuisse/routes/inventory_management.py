@@ -10,6 +10,8 @@ logger = logging.getLogger(__name__)
 def editDistDP(s1, s2): 
     len1 = len(s1) 
     len2 = len(s2) 
+    if len1*len2 == 0:
+        return len1+len2
     dp = [[0 for i in range(len2 + 1)] 
              for j in range(len1 + 1)] 
 
@@ -25,59 +27,48 @@ def editDistDP(s1, s2):
                 dp[i][j] = 1 + min(dp[i][j - 1], 
                                    dp[i - 1][j - 1], 
                                    dp[i - 1][j])
-    num_changes = dp[len1][len2]
-    new_str = get_changes(s1,s2,dp)
-    return (num_changes, new_str)
+    res, count = get_changes(s1, s2, dp)
+    return (res, count, s2)
 
 def get_changes(s1, s2, dp):
-    new_str = ''
+    count = 0
+    s1 = list(s1)
     i = len(s1)
     j = len(s2)
     while(i>0 or j>0):
         if i==0 or j==0:
             if i == 0:
-                new_str = '+' + s2[j-1] + new_str
+                count += 1
+                s1.insert(i, '+' + s2[j-1])
                 j-=1
             else:
-                new_str = '-' + s1[i-1]+ new_str
+                count += 1
+                s1.insert(i-1, '-')
                 i-=1
             continue
 
         if s1[i-1] == s2[j-1]:
-            new_str = s1[i-1] + new_str
             i-=1
             j-=1
         elif dp[i][j] == dp[i-1][j-1] + 1:
             # replace
-            new_str = s2[j-1] + new_str
+            count += 1
+            s1[i-1] = s2[j-1]
             i-=1
             j-=1
-            pass
         elif dp[i][j] == dp[i-1][j] + 1:
             # delete
-            new_str = "-" + s1[i-1] + new_str
+            count += 1
+            s1.insert(i-1, '-')
             i-=1
-            pass
         elif dp[i][j] == dp[i][j-1] + 1:
             # add
-            new_str = "+" + s2[j-1] + new_str
+            count += 1
+            s1.insert(i, '+' + s2[j-1])
             j-=1
-    return new_str
+    s1 = ''.join(s1)
+    return (s1, count)
 
-def manage_inventory(my_dict):
-    search_item_name = my_dict["searchItemName"]
-    items = my_dict["items"]
-
-    my_list = []
-    for item in items:
-        num_changes, new_str = editDistDP(search_item_name, item)
-        my_list.append((num_changes, new_str))
-
-    my_list.sort(key=lambda x: x[0])
-    results = []
-    for item in my_list:
-        results.append(item[1])
-    return results
 
 @app.route('/inventory-management', methods=["POST"])
 def inventory_management():
@@ -86,10 +77,23 @@ def inventory_management():
 
     result = []
     for entry in data:
-        result.append({
-            "searchItemName": entry["searchItemName"],
-            "searchResult": manage_inventory(entry)
-        })
+        entry_name = entry['searchItemName']
+        products = entry["items"]
+        
+        mid_results = []
+        for product in products:
+            mid_results.append(editDistDP(entry_name, product))
+        mid_results.sort(key = lambda x: (x[1],x[2]))
+        final_results = []
+        for i in range(min(len(mid_results), 10)):
+            final_results.append(mid_results[i][0])
+        
+        answer = {
+            "searchItemName": entry_name,
+            "searchResult": final_results
+        }
+
+        result.append(answer)
 
     logging.info("My result :{}".format(result))
     return jsonify(result);
