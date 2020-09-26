@@ -16,7 +16,7 @@ def evaluate_fruitbasket():
 
     total = 0
     for item in data.keys():
-        total += np.random.randint(1,100) * data[item]
+        total += 50 * data[item]
 
     result = int(total)
     logging.info("My result :{}".format(result))

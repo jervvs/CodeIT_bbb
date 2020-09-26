@@ -39,7 +39,7 @@ def evaluateCluster():
     data = request.get_json();
     logging.info("data sent for evaluation {}".format(data))
     arr = data
-    result = {'result': clusters(arr)}
+    result = {'answer': clusters(arr)}
 
     logging.info("My result :{}".format(result))
     return json.dumps(result);
