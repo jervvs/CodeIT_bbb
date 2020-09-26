@@ -74,6 +74,8 @@ def contact_trace():
     cluster = []
     visited = defaultdict(int)
 
+    
+
     tracemap[infected_name] = infected_genome
     tracemap[origin_name] = origin_genome
 
@@ -81,7 +83,7 @@ def contact_trace():
         cluster.append(strand['name'])
         tracemap[strand['name']] = strand['genome']
     
-    result = recurseToOrigin(False, origin_name, infected_name, cluster, tracemap, [], visited)
+    result = recurseToOrigin(False, origin_name, [infected_name, False], cluster, tracemap, [], visited)
     count = 0
     path = []
     path_str = infected_name
