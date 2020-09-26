@@ -7,17 +7,6 @@ from codeitsuisse import app;
 
 logger = logging.getLogger(__name__)
 
-def inBetween(intersection, endpoint1, endpoint2):
-    if intersection[0] < endpoint1[0] and intersection[0] < endpoint2[0]:
-        return False
-    if intersection[0] > endpoint1[0] and intersection[0] > endpoint2[0]:
-        return False
-    if intersection[1] < endpoint1[1] and intersection[1] < endpoint2[1]:
-        return False
-    if intersection[1] > endpoint1[1] and intersection[1] > endpoint2[1]:
-        return False
-    return True
-
 # https://stackoverflow.com/questions/20677795/how-do-i-compute-the-intersection-point-of-two-lines/20679579
 def line_intersection(line1, line2): # line1 = ([x1,y1], [x2,y2]), line2 = ([x3,y3], [x4,y4])
     xdiff = (line1[0][0] - line1[1][0], line2[0][0] - line2[1][0])
@@ -34,13 +23,13 @@ def line_intersection(line1, line2): # line1 = ([x1,y1], [x2,y2]), line2 = ([x3,
     x = det(d, xdiff) / div
     y = det(d, ydiff) / div
 
-    if inBetween([x,y], line1[0], line1[1]):
+    if min(line1[0][0], line1[1][0]) <= x and x <= max(line1[0][0], line1[1][0]) and min(line1[0][1], line1[1][1]) <= y and y <= max(line1[0][1], line1[1][1]):
         return [x,y]
     else:
         return None
 
 @app.route('/revisitgeometry', methods=['POST'])
-def evaluateGeometry():
+def evaluate():
     data = request.get_json();
     logging.info("data sent for evaluation {}".format(data))
 
@@ -57,6 +46,7 @@ def evaluateGeometry():
         intersection = line_intersection(line1, line2)
         if intersection != None:
             res.append({"x": intersection[0], "y": intersection[1]})
+
 
     logging.info("My result :{}".format(res))
     return json.dumps(res);
