@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 def editDistDP(s1, s2): 
     len1 = len(s1) 
-    len2 = len(s2) 
+    len2 = len(s2)
     dp = [[0 for i in range(len2 + 1)] 
              for j in range(len1 + 1)] 
 
