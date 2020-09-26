@@ -46,20 +46,22 @@ def get_good_genome(my_str):
     result += "A"*left["A"]
     return result
 
-@app.route('/intelligent-farming', methods=['POST'])
+@app.route('/intelligent-farming', methods=["POST"])
 def get_gmo():
     data = request.get_json();
     logging.info("data sent for evaluation {}".format(data))
     entries = data.get("list");
-    given_id = data.get("id");
-    for i in range(len(entries)):
-        new_genome = get_good_genome(entries[i]["geneSequence"])
-        entries[i]["geneSequence"] = new_genome
+    given_id = data.get("runId");
     
     result = {
         "runId": given_id,
-        "list":entries
+        "list": [
+            {
+                "id": entry["id"],
+                "geneSequence": get_good_genome(entry["geneSequence"])
+            } for entry in entries
+        ]
     }
 
-    logging.info("My result:{}".format(result))
+    logging.info("My result :{}".format(result))
     return json.dumps(result);
