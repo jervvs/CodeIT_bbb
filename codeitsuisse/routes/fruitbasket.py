@@ -27,8 +27,6 @@
 
 import logging
 import json
-import numpy as np
-import math
 
 from flask import request, jsonify;
 
@@ -42,11 +40,10 @@ def evaluate_fruitbasket():
     data = json.loads(data)
     logging.info("data sent for evaluation {}".format(data))
 
-    estimate = 0
+    result = 0
     for item in data.keys():
-        estimate += np.random.randint(1,100) * data[item]
+        result += 50 * data[item]
 
-    estimate = int(math.ceil(estimate/100.0))*100
-    logging.info("My result :{}".format(estimate))
-    result = "{}".format(estimate)
+    logging.info("My result :{}".format(result))
+    result = "{}".format(result)
     return result
