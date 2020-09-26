@@ -51,7 +51,7 @@ def clusters(arr):
 #   ]))
 
 @app.route('/cluster', methods=['POST'])
-def evaluate():
+def evaluateCluster():
     data = request.get_json();
     logging.info("data sent for evaluation {}".format(data))
     arr = data
