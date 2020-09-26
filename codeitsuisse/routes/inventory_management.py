@@ -78,10 +78,9 @@ def manage_inventory(my_dict):
 def inventory_management():
     data = request.get_json();
     logging.info("data sent for evaluation {}".format(data))
-    entries = data.get();
 
     results = []
-    for entry in entries:
+    for entry in data:
         results.append({
             "searchItemName": entry["searchItemName"],
             "searchResult": manage_inventory(entry["searchResult"])
