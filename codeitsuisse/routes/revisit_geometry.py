@@ -33,8 +33,8 @@ def evaluateGeometry():
     data = request.get_json();
     logging.info("data sent for evaluation {}".format(data))
 
-    shapeCoordinates = data.get("input").get("shapeCoordinates")
-    lineCoordinates = data.get("input").get("lineCoordinates")
+    shapeCoordinates = data.get("shapeCoordinates")
+    lineCoordinates = data.get("lineCoordinates")
 
     n = len(shapeCoordinates)
     l = len(lineCoordinates)
