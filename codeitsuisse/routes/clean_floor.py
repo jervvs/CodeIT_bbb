@@ -45,7 +45,7 @@ def clean(arr):
     return res
 
 @app.route('/clean_floor', methods=['POST'])
-def clean_floor():
+def evaluate_clean_floor():
     data = request.get_json();
     logging.info("data sent for evaluation {}".format(data))
 
