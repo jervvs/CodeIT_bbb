@@ -1,5 +1,6 @@
 import logging
 import json
+import numpy as np
 
 from flask import request, jsonify;
 
@@ -7,60 +8,52 @@ from codeitsuisse import app;
 
 logger = logging.getLogger(__name__)
 
-# https://stackoverflow.com/questions/20677795/how-do-i-compute-the-intersection-point-of-two-lines/20679579
-def line_intersection(line1, line2): # line1 = ([x1,y1], [x2,y2]), line2 = ([x3,y3], [x4,y4])
-    xdiff = (line1[0][0] - line1[1][0], line2[0][0] - line2[1][0])
-    ydiff = (line1[0][1] - line1[1][1], line2[0][1] - line2[1][1])
-
-    def det(a, b):
-        return a[0] * b[1] - a[1] * b[0]
-
-    div = det(xdiff, ydiff)
-    if div == 0:
-       return None
-
-    d = (det(*line1), det(*line2))
-    x = det(d, xdiff) / div
-    y = det(d, ydiff) / div
-
-    if min(line1[0][0], line1[1][0]) <= x and x <= max(line1[0][0], line1[1][0]) and min(line1[0][1], line1[1][1]) <= y and y <= max(line1[0][1], line1[1][1]):
-        return [x,y]
-    else:
-        return None
-
 @app.route('/revisitgeometry', methods=['POST'])
 def evaluateGeometry():
     data = request.get_json();
     logging.info("data sent for evaluation {}".format(data))
+    shapeCoordinates = data.get("shapeCoordinates");
+    lineCoordinates = data.get("lineCoordinates");
+    result = naive_intersection(shapeCoordinates, lineCoordinates)
+    logging.info("My result :{}".format(result))
+    return json.dumps(result);
 
-    shapeCoordinates = data.get("input").get("shapeCoordinates")
-    lineCoordinates = data.get("input").get("lineCoordinates")
+def naive_intersection(shapeCoordinates, lineCoordinates):
+    lineDirection = { "x" : lineCoordinates[0]["x"] - lineCoordinates[1]["x"], "y" : lineCoordinates[0]["y"] - lineCoordinates[1]["y"]}
+    results = []
+    for i in range(-len(shapeCoordinates), 0):
+        # A = [[d1x, -d2x], [d1y, -d2y]] 
+        # b = [p2x - p1x, p2y - p2x]
+        # where l1 = p1 + t*d1 is the line segment on the polygon
+        # and l2 = p2 + s*d2 is the line 
+        A = np.array([
+            [shapeCoordinates[i+1]["x"] - shapeCoordinates[i]["x"] , -lineDirection["x"]], 
+            [shapeCoordinates[i+1]["y"] - shapeCoordinates[i]["y"] , -lineDirection["y"]]
+        ])
+        b = np.array([
+            lineCoordinates[0]["x"] - shapeCoordinates[i]["x"],
+            lineCoordinates[0]["y"] - shapeCoordinates[i]["y"]
+        ])
 
-    n = len(shapeCoordinates)
-    l = len(lineCoordinates)
+        x = np.linalg.solve(A, b)
+        s = x[1]
+        intersection = {
+            "x" : lineCoordinates[0]["x"] + s * lineDirection["x"], 
+            "y" : lineCoordinates[0]["y"] + s * lineDirection["y"]
+        }
+        # if intersection falls within the endpoints of l1
+        if inBetween(intersection, shapeCoordinates[i], shapeCoordinates[i+1]):
+            results.append(intersection)
+    results = [dict(t) for t in {tuple(d.items()) for d in results}]
+    return results
 
-    res = []
-    for i in range(n):
-        second_index = (i+1)%n
-        line1 = [[shapeCoordinates[i]['x'], shapeCoordinates[i]['y']], [shapeCoordinates[second_index]['x'], shapeCoordinates[second_index]['y']]]
-        if l == 2: # if only 2 point, no need to wrap around (last point, and 1st point)
-            line2 = [[lineCoordinates[0]['x'], lineCoordinates[0]['y']],
-                     [lineCoordinates[1]['x'], lineCoordinates[1]['y']]]
-            intersection = line_intersection(line1, line2)
-            if intersection != None:
-                res.append({"x": intersection[0], "y": intersection[1]})
-        else:
-            for j in range(l):
-                second_index = (j + 1) % l
-                line2 = [[lineCoordinates[j]['x'], lineCoordinates[j]['y']],
-                         [lineCoordinates[second_index]['x'], lineCoordinates[second_index]['y']]]
-
-
-                if intersection != None:
-                    res.append({"x":intersection[0], "y":intersection[1]})
-
-    logging.info("My result :{}".format(res))
-    return json.dumps(res);
-
-
-
+def inBetween(intersection, endpoint1, endpoint2):
+    if intersection["x"] < endpoint1["x"] and intersection["x"] < endpoint2["x"]: 
+        return False
+    if intersection["x"] > endpoint1["x"] and intersection["x"] > endpoint2["x"]: 
+        return False
+    if intersection["y"] < endpoint1["y"] and intersection["y"] < endpoint2["y"]: 
+        return False
+    if intersection["y"] > endpoint1["y"] and intersection["y"] > endpoint2["y"]: 
+        return False
+    return True
