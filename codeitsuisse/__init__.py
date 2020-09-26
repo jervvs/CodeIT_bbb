@@ -8,6 +8,8 @@ import codeitsuisse.routes.gmo
 import codeitsuisse.routes.babylon
 import codeitsuisse.routes.social_distancing
 import codeitsuisse.routes.fruitbasket
+import codeitsuisse.routes.cluster
+
 
 
 
