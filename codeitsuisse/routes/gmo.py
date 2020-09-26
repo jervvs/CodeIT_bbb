@@ -87,7 +87,7 @@ def get_good_genome(my_str):
             num_T = my_dict['T'] - num_ACGT
             return 'ACGT'*num_ACGT + 'CC'*num_CC + 'C'*num_C + 'G'*num_G + 'T'*num_T
 
-@app.route('GMO', methods=["POST"])
+@app.route('/intelligent-farming', methods=["POST"])
 def get_gmo():
     data = request.get_json();
     logging.info("data sent for evaluation {}".format(data))
