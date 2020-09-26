@@ -61,7 +61,7 @@ def clean_floor():
     inputValue = data.get("tests");
     for key, value in inputValue.items():
         val = clean(value['floor'])
-        res['answers']['key'] = val
+        res['answers'][key] = val
 
     logging.info("My result :{}".format(res))
     return json.dumps(res);
