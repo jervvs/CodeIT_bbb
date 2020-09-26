@@ -59,10 +59,7 @@ def find_similarity(search_item_name, item):
     new_str = get_changes(search_item_name, item, dp)
     return (num_changes, new_str[1:])
 
-def manage_inventory(my_dict):
-    search_item_name = my_dict["searchItemName"]
-    items = my_dict["items"]
-
+def manage_inventory(items):
     my_list = []
     for item in items:
         num_changes, new_str = find_similarity(search_item_name, item)
