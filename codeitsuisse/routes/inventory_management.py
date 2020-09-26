@@ -83,7 +83,7 @@ def inventory_management():
     for entry in data:
         results.append({
             "searchItemName": entry["searchItemName"],
-            "searchResult": manage_inventory(entry["searchResult"])
+            "searchResult": manage_inventory(entry["items"])
         })
 
     logging.info("My result :{}".format(results))
