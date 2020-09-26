@@ -8,45 +8,27 @@ from codeitsuisse import app;
 logger = logging.getLogger(__name__)
 
 def clean(arr):
+    curr_index = 0
+    moves = 0
     total = sum(arr)
-    res = 1
 
-    index = 1
-    prev_one = 0 if arr[0] == 1 else -1
+    while total > 0:
+        left = (curr_index == len(arr)-1) or (curr_index>0) and arr[curr_index-1]>0
 
-    while total != 0 and index < len(arr):
-        if arr[index] == 1:
-            arr[index] = 0
-            if index != 1:
-                res += 1
-            total -= 1
-            index += 1
+        # take the step
+        if left:
+            curr_index -= 1
         else:
-            if prev_one >= 0:
-                arr[index] = 1
-                total += 1
-                if index != 1:
-                    res += 1
-                for i in range(prev_one, index):
-                    arr[i] = 0
-                    res += 2
+            curr_index += 1
 
-                arr[index] = 0
-                index += 1
-                prev_one = -1
-            else:
-                arr[index] = 1
-                total += 1
-                if index != 1:
-                    res += 1
-                prev_one = index
-                index += 1
-
-    if prev_one != -1:
-        for i in range(prev_one, index-1):
-            arr[i] = 0
-            res += 1
-    return res
+        if arr[curr_index]>0:
+            arr[curr_index] -= 1
+            total -= 1
+        else:
+            arr[curr_index] += 1
+            total += 1
+        moves += 1
+    return moves
 
 @app.route('/clean_floor', methods=['POST'])
 def clean_floor():

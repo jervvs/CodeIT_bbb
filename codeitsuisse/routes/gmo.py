@@ -46,7 +46,7 @@ def get_good_genome(my_str):
     result += "A"*left["A"]
     return result
 
-@app.route('intelligent-farming', methods=["POST"])
+@app.route('/intelligent-farming', methods=["POST"])
 def get_gmo():
     data = request.get_json();
     logging.info("data sent for evaluation {}".format(data))
