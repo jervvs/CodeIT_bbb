@@ -26,7 +26,7 @@ def evaluateBabylon():
     return json.dumps(result);
 
 def get_books(books, days, book_index, books_read, book_length):
-    if book_index == book_length:
+    if book_index >= book_length:
         return books_read
     book = books[book_index]
 
