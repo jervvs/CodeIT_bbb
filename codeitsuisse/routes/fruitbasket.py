@@ -12,17 +12,14 @@ logger = logging.getLogger(__name__)
 @app.route('/fruitbasket', methods=['POST'])
 def evaluate_fruitbasket():
     data = request.get_data()
+    data = json.loads(data)
     logging.info("data sent for evaluation {}".format(data))
 
-    appleAmount = data.get("maApple")
-    watermelonAmount = data.get("maWatermelon")
-    bananaAmount = data.get("maBanana")
+    result = 0
+    for item in data.keys():
+        estimate += np.random.randint(1,100) * data[item]
 
-    appleWeight = 75
-    watermelonWeight = 50
-    bananaWeight = 50
-
-    result = appleAmount * appleWeight + watermelonAmount * watermelonWeight + bananaAmount * bananaWeight
-
+    result = int(result)
     logging.info("My result :{}".format(result))
-    return json.dumps(result)
+    result = "{}".format(result)
+    return result
