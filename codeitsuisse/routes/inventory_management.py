@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 def editDistDP(s1, s2): 
     len1 = len(s1) 
-    len2 = len(s2)
+    len2 = len(s2) 
     dp = [[0 for i in range(len2 + 1)] 
              for j in range(len1 + 1)] 
 
@@ -26,13 +26,23 @@ def editDistDP(s1, s2):
                                    dp[i - 1][j - 1], 
                                    dp[i - 1][j])
     num_changes = dp[len1][len2]
-    return (dp, num_changes)
+    new_str = get_changes(s1,s2,dp)
+    return (num_changes, new_str)
 
 def get_changes(s1, s2, dp):
     new_str = ''
     i = len(s1)
     j = len(s2)
-    while(i>=0 and j>=0):
+    while(i>0 or j>0):
+        if i==0 or j==0:
+            if i == 0:
+                new_str = '+' + s2[j-1] + new_str
+                j-=1
+            else:
+                new_str = '-' + s1[i-1]+ new_str
+                i-=1
+            continue
+
         if s1[i-1] == s2[j-1]:
             new_str = s1[i-1] + new_str
             i-=1
@@ -54,18 +64,13 @@ def get_changes(s1, s2, dp):
             j-=1
     return new_str
 
-def find_similarity(search_item_name, item):
-    dp, num_changes = editDistDP(search_item_name, item)
-    new_str = get_changes(search_item_name, item, dp)
-    return (num_changes, new_str[1:])
-
 def manage_inventory(my_dict):
     search_item_name = my_dict["searchItemName"]
     items = my_dict["items"]
 
     my_list = []
     for item in items:
-        num_changes, new_str = find_similarity(search_item_name, item)
+        num_changes, new_str = editDistDP(search_item_name, item)
         my_list.append((num_changes, new_str))
 
     my_list.sort(key=lambda x: x[0])
@@ -79,12 +84,12 @@ def inventory_management():
     data = request.get_json();
     logging.info("data sent for evaluation {}".format(data))
 
-    results = []
+    result = []
     for entry in data:
-        results.append({
+        result.append({
             "searchItemName": entry["searchItemName"],
             "searchResult": manage_inventory(entry)
         })
 
-    logging.info("My result :{}".format(results))
-    return jsonify(results);
+    logging.info("My result :{}".format(result))
+    return jsonify(result);
