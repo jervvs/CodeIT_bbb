@@ -20,23 +20,23 @@ def evaluateBabylon():
     # dp = np.full([numberOfBooks] + [i + 1 for i in days], -1)
     # result = maxWeight(days, books, numberOfBooks)
 
-    max_book = min(numberOfDays*3, numberOfBooks)
-    result = get_books(sorted(books)[:max_book], days, 0, 0, numberOfBooks)
+    max_book = min(len(days)*3, len(books))
+    result = get_books(sorted(books)[:max_book], days, 0, 0)
     logging.info("My result :{}".format(result))
     return json.dumps(result);
 
-def get_books(books, days, book_index, books_read, book_length):
-    if book_index >= book_length:
+def get_books(books, days, book_index, books_read):
+    if book_index >= len(books):
         return books_read
-    book = books[book_index]
 
+    book = books[book_index]
     res = books_read
     can_add = False
 
     for i in range(len(days)):
         if book <= days[i]:
             days[i] -= book # assume the book gets included in the day
-            res_chosen = get_books(books, days, book_index+1, books_read+1, book_length) # recurse with the above assumption
+            res_chosen = get_books(books, days, book_index+1, books_read+1) # recurse with the above assumption
             res = max(res, res_chosen)
             days[i] += book # book not read on that day
             can_add = True
@@ -44,7 +44,7 @@ def get_books(books, days, book_index, books_read, book_length):
     if not can_add: # can still take in at least 1 book
         return res
 
-    res_not_chosen = get_books(books, days, book_index+1, books_read, book_length)
+    res_not_chosen = get_books(books, days, book_index+1, books_read)
     res = max(res, res_not_chosen)
     return res
 
