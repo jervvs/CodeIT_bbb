@@ -20,10 +20,5 @@ def evaluate_fruitbasket():
 
     logging.info("My result :{}".format(total))
     
-
-    prev_result = 12349
-    prev_diff = 400
-    
-
-    result = "{}".format(prev_result - prev_diff)
+    result = "{}".format(total)
     return result
