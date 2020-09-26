@@ -63,8 +63,8 @@ def clean_floor():
         val = clean(value['floor'])
         res['answers']['key'] = val
 
-    logging.info("My result :{}".format(answers))
-    return json.dumps(answers);
+    logging.info("My result :{}".format(res))
+    return json.dumps(res);
 
 
 
