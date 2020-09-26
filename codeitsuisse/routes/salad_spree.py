@@ -27,8 +27,8 @@ def evaluateSalad():
     if res == 10 ** 9 + 7:
         res = 0
 
-    # result = {'result': res}
-    # logging.info("My result :{}".format(result))
-    return json.dumps(res);
+    result = {'result': res}
+    logging.info("My result :{}".format(result))
+    return json.dumps(result);
 
 
