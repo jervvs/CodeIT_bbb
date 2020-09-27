@@ -31,6 +31,10 @@ def evaluatePath():
 def shortest_path(maze, startingCoords, endingCoords):
     rows = len(maze)
     cols = len(maze[0])
+
+    if rows == 0 or cols == 0:
+        return 0
+
     visited = [[False for _ in range(cols)] for _ in range(rows)]
     queue = []
     min_dist = rows*cols+1
