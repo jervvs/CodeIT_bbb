@@ -11,14 +11,22 @@ logger = logging.getLogger(__name__)
 def evaluatePath():
     data = request.get_json();
     logging.info("data sent for evaluation {}".format(data))
-    
-    res = {}
 
-    for test in data['tests']:
-        res[test] = shortest_path(test['maze'], test['start'], test['end'])
-    
-    logging.info("My result :{}".format(res))
-    return jsonify(res);
+    entries = data.get("tests");
+
+    result = {
+        'answers':{
+
+        }
+    }
+
+    for key in entries.keys():
+        _id = key
+        result['answers'][_id] = shortest_path(entries[key]["maze"], entries[key]["start"], entries[key]["end"])
+
+    logging.info("My result :{}".format(result))
+    return json.dumps(result);
+
     
 def shortest_path(maze, startingCoords, endingCoords):
     rows = len(maze)
